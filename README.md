@@ -1,12 +1,12 @@
 # NavNode
 
-TODO: Write a gem description
+Nav for rails 
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-```ruby
+```
 gem 'nav_node'
 ```
 
@@ -20,12 +20,50 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+with erb
 
-## Contributing
+```
+  <%= render_nav class: 'menu' do |node| %>
+    <%= node.+ "Node1", "/node1", class: "menu-node1", match: ['/node1', '/node2'] %>
+    <%= node.+ "Node2", "/node2", class: "menu-node2", match: '/node2/*' %>
+  <% end %>
+```
 
-1. Fork it ( https://github.com/[my-github-username]/nav_node/fork )
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+with Slim
+
+```
+
+  = render_nav class: 'menu' do |node|
+    - node.+ "Node1", "/node1", class: 'menu-node1', match: ['/node1', '/node2']
+    - node.+ "Node2", "/node2", class: 'menu-node2', match: '/node2/*'
+```
+
+in "node1" page output 
+
+```
+  <ul class="inline-menu">
+    <li class="first">
+      <a href="/node1"><span>Node1</span></a>
+      </li>
+      <li class="last active">
+        <a href="/node2"><span>Node2</span></a>
+      </li>
+   </ul>
+```
+
+in "node2" page output
+
+```
+  <ul class="inline-menu">
+    <li class="first active">
+      <a href="/node1"><span>Node1</span></a>
+      </li>
+      <li class="last active">
+        <a href="/node2"><span>Node2</span></a>
+      </li>
+   </ul>
+```
+
+## License
+
+Copyright © 2015, Ye Li. Released under the MIT License

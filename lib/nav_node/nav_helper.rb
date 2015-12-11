@@ -14,12 +14,7 @@ module NavNode
       end
 
       nav_tag ||= "ul"
-      full_path = if respond_to?(:request)
-                    request.fullpath
-                  else
-                    "/"
-                  end
-
+      full_path = respond_to?(:request) ? request.fullpath : "/"
       node_html = nav_node.parse_list(full_path, "").join("")
       list_html = "<#{nav_tag} class='#{options[:class]}'>#{node_html}</#{nav_tag}>"
       list_html.html_safe

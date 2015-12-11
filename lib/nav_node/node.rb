@@ -13,6 +13,7 @@ module NavNode
         @list << {content: content, options: options}
       end
     end
+    
     alias_method :+, :add 
 
     def parse_list(request_path, root_path = nil)
@@ -23,11 +24,11 @@ module NavNode
         node_path = value[:path]
         node_class = []
         node_content = ""
-        node_class<< "first" if index == 0 
+        
+        node_class << "first" if index == 0 
         node_class << "last" if index == list.length - 1
-        if url_match(node_match, request_path, node_type, node_path)
-          node_class << "active"
-        end
+        node_class << "active" if url_match(node_match, request_path, node_type, node_path)
+        
         if node_type == :link
           link_class = " class='#{value[:class]}'" if value[:class]
           nodes << "<li class='#{node_class.join(" ")}'><a href='#{node_path}'#{link_class}>#{value[:content]}</a></li>"
@@ -40,27 +41,26 @@ module NavNode
 
     def url_match(node_match, request_path, node_type, node_path)
       match = false
-      if node_match
-        if node_match.is_a?(String)
-          if request_path.match(%r"#{node_match}")
-            match = true
-          end
+      
+      if !node_match
+        if node_type == :link && request_path == node_path
+          return true 
         end
-        if node_match.is_a?(Array)
-          node_match.each do |nm|
-            if request_path.match(%r"#{nm}")
-              match = true
-              break
-            end
-          end
-        end
-      else
-        if node_type == :link
-          if request_path == node_path
+      end
+
+      if node_match.is_a?(String)
+        match = true if request_path.match(%r"#{node_match}")
+      end
+      
+      if node_match.is_a?(Array)
+        node_match.each do |nm|
+          if request_path.match(%r"#{nm}")
             match = true
+            break
           end
         end
       end
+      
       return match
     end
   end
